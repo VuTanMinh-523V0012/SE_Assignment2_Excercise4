@@ -1,0 +1,99 @@
+﻿@model IEnumerable<OrderManagement.ViewModels.BestItemViewModel>
+
+@{
+    ViewData["Title"] = "Best Selling Items";
+}
+
+<div class="card mb-4">
+    <div class="card-header bg-warning d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Best Selling Items Report</h4>
+        <button onclick="window.print()" class="btn btn-dark">
+            <i class="bi bi-printer"></i> Print Report
+        </button>
+    </div>
+    <div class="card-body">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <p class="lead">
+                    This report shows the best selling items based on quantity sold.
+                </p>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Rank</th>
+                        <th>Item</th>
+                        <th>Size</th>
+                        <th>Unit Price</th>
+                        <th>Stock</th>
+                        <th>Total Quantity</th>
+                        <th>Total Sales</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int rank = 1;
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@rank</td>
+                            <td>@item.Item.ItemName</td>
+                            <td>@item.Item.Size</td>
+                            <td>$@item.Item.UnitPrice.ToString("F2")</td>
+                            <td>@item.Item.StockQuantity</td>
+                            <td>@item.TotalQuantity</td>
+                            <td>$@item.TotalAmount.ToString("F2")</td>
+                        </tr>
+                        rank++;
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5" class="text-end"><strong>Grand Totals:</strong></td>
+                        <td><strong>@Model.Sum(x => x.TotalQuantity)</strong></td>
+                        <td><strong>$@Model.Sum(x => x.TotalAmount).ToString("F2")</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="btn-group" role="group">
+            <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <style media="print">
+        @@media print {
+            .navbar, .footer, .btn, .card-header button {
+                display: none !important;
+            }
+
+            .card {
+                border: none !important;
+            }
+
+            .card-header {
+                background-color: #f8f9fa !important;
+                color: #000 !important;
+            }
+
+            table {
+                width: 100%;
+            }
+
+            .table-dark th {
+                background-color: #f8f9fa !important;
+                color: #000 !important;
+            }
+        }
+    </style>
+}

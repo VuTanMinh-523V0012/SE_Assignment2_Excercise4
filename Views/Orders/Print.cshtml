@@ -1,0 +1,113 @@
+﻿@model OrderManagement.Models.Order
+
+@{
+    ViewData["Title"] = "Print Order";
+    Layout = "_PrintLayout";
+}
+
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <h2>ORDER RECEIPT</h2>
+        <p class="mb-0">Order Management System</p>
+        <p>Order #: @Model.OrderID</p>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-6">
+            <h5>Order Information</h5>
+            <p>
+                <strong>Order Date:</strong> @Model.OrderDate.ToString("yyyy-MM-dd")<br>
+                <strong>Status:</strong> @Model.Status<br>
+            </p>
+        </div>
+        <div class="col-6">
+            <h5>Agent Information</h5>
+            <p>
+                <strong>Name:</strong> @Model.Agent.AgentName<br>
+                <strong>Address:</strong> @Model.Agent.Address<br>
+                @if (!string.IsNullOrEmpty(Model.Agent.ContactNumber))
+                {
+                    <strong>Contact:</strong> @Model.Agent.ContactNumber
+
+                    <br>
+                }
+                @if (!string.IsNullOrEmpty(Model.Agent.Email))
+                {
+                    <strong>Email:</strong> @Model.Agent.Email
+
+                    <br>
+                }
+            </p>
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <h5>Items Ordered</h5>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Size</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.OrderDetails)
+                {
+                    <tr>
+                        <td>@item.Item.ItemName</td>
+                        <td>@item.Item.Size</td>
+                        <td>@item.Quantity</td>
+                        <td>$@item.UnitAmount.ToString("F2")</td>
+                        <td>$@item.TotalAmount.ToString("F2")</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="text-end"><strong>Grand Total:</strong></td>
+                    <td><strong>$@Model.TotalAmount.ToString("F2")</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <p class="mb-1"><strong>Terms & Conditions</strong></p>
+            <ol class="ps-3">
+                <li>Payment is due within 30 days.</li>
+                <li>Goods remain the property of the company until paid in full.</li>
+                <li>Returns accepted within 14 days with original receipt.</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-6">
+            <p>
+                <strong>Customer Signature:</strong> _______________________
+            </p>
+        </div>
+        <div class="col-6 text-end">
+            <p>
+                <strong>Authorized Signature:</strong> _______________________
+            </p>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <p class="mb-0">Thank you for your business!</p>
+        <p class="small">Generated on @DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")</p>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            window.print();
+        });
+    </script>
+}
